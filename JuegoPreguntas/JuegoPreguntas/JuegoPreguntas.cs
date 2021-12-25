@@ -37,16 +37,18 @@ namespace JuegoPreguntas
                 List<Respuesta> listRespuestas = new List<Respuesta>();
                 listRespuestas = db.Respuestas.Where(p => p.IdPregunta == randomNumero).ToList();
                 int idOpcion = listRespuestas.FindIndex(x => x.IdPregunta == randomNumero);
-                var resp = listRespuestas[idOpcion].DescRespuesta;
-                Console.WriteLine($"Elija una de las siguientes opciones:");
-                for (int i = 0; i < 4; i++)
-                {
-                    Console.WriteLine($"{resp}");
-                }
                 
+                Console.WriteLine($"Elija una de las siguientes opciones:");
+                for (int i = 1; i < 5; i++)
+                {
+                    var resp = listRespuestas[idOpcion].DescRespuesta;
+                    Console.WriteLine($"{i}){resp}");
+                    idOpcion += 1;
+                }
+                Console.WriteLine($"Opción seleccionada: ");
                 string opcion;
                 opcion = Console.ReadLine();
-                Console.WriteLine($"Opción seleccionada: {opcion}");
+                 
                
                 
 
