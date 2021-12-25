@@ -34,7 +34,8 @@ namespace JuegoPreguntas
                     {
                         Pregunta PreguntaSeleccinada = listPreguntas[randomNumero];
                         var descripcionPregunta = PreguntaSeleccinada.DescPregunta;
-                        Console.WriteLine($"Nivel: #{j}. Por un premio de ${nivelActual.ValPremioNivel} pesos.\n{descripcionPregunta}:");
+                        Console.WriteLine();
+                        Console.WriteLine($"Nivel #{j}. \nPor un premio de ${nivelActual.ValPremioNivel} pesos.\n{descripcionPregunta}:");
 
                         List<Respuesta> listRespuestas = new List<Respuesta>();
                         listRespuestas = db.Respuestas.Where(p => p.IdPregunta == PreguntaSeleccinada.IdPregunta).ToList();
@@ -51,7 +52,14 @@ namespace JuegoPreguntas
                         }
                         Console.WriteLine($"Ingrese el número de la opción seleccionada: ");
 
-                        var opcionSelected = Convert.ToInt32(Console.ReadLine());
+                        var opcionSelectedString = Console.ReadLine();
+
+                        if(int.TryParse(opcionSelectedString, out var opcionSelected) == false || opcionSelected > 4 || opcionSelected < 1)
+                        {
+                            Console.WriteLine("Ingresaste una opción invalida. El juego se da por terminado. ");
+                            acum_premio = 0;
+                            break;
+                        }
 
                         switch (nivelActual.Nivel)
                         {
@@ -88,32 +96,37 @@ namespace JuegoPreguntas
                             Console.WriteLine($"LA RESPUESTA ES INCORRECTA. Quedaste eliminado.");
                             break;
                         }
-                        if (j <= 5)
+                        if (j < 5)
                         {
-                            Console.WriteLine("¿Deseas continuar con la siguiente pregunta? \nRecuerda que el nivel de dificultad será mayor. \nIngrese 'S' para continuar o 'N' para finalizar.");
+                            Console.WriteLine("¿Deseas continuar con la siguiente pregunta? \nRecuerda que el nivel de dificultad será mayor. \nIngresa 'S' para continuar o cualquier otro para finalizar.");
 
                             var continuar = Console.ReadLine();
                             if (continuar.Trim().ToLower() != "s")
                             {
+                                Console.WriteLine($"Felicitaciones {nombre}!! Terminaste con un acumulado de ${acum_premio}");
                                 break;
                             }
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Felicitaciones {nombre}!! Completaste el juego hasta el final. Terminaste con un acumulado de ${acum_premio}");
                         }
 
                     }
                     else
                     {
-                        Console.WriteLine("La cantidad de preguntas no coincide con lo esperado.");
+                        Console.WriteLine("La cantidad de preguntas no coincide con lo esperado. \n El juego se da por finalizado, revisa por favor las configuracion de las preguntas.");
                         acum_premio = 0;
+                        break;
                     }
 
 
                 }
 
-                Console.WriteLine($"El juego ha finalizado. Terminaste con un acumulado de {acum_premio}");
                 infoParticipante.TotalPremio = Convert.ToDecimal(acum_premio);
                 db.Participantes.Add(infoParticipante);
                 db.SaveChanges();
-                Console.WriteLine("Presione enter para finalizar.");
+                Console.WriteLine("El juego ha terminado. Presione enter para cerrar la ventana.");
                 Console.ReadLine();
             }
 
