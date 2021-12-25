@@ -13,58 +13,110 @@ namespace JuegoPreguntas
     {
         static void Main(string[] args)
         {
-            var pregunta = 0;
-            var respuesta = false;
-            var premio = 100000;
-            var acum_premio = 0;
+            var acum_premio = 0.0;
             Console.WriteLine("Por favor digite su nombre:");
             string nombre;
             nombre = Console.ReadLine();
             Console.WriteLine($"Nombre del participante: {nombre}");
-            pregunta += 1;
-            var randomNumero = new Random().Next(1, 6);
-            
-            Console.WriteLine($"Nuemro aleatorio pregunta{pregunta} es: {randomNumero}");
-            
-            List<Pregunta> listPreguntas = new List<Pregunta>();
+            var randomNumero = new Random().Next(0, 5);
             using (var db = new Prueba_SofkaContext())
             {
-                listPreguntas = db.Preguntas.Where(p => p.IdCategoria == 1).ToList();
-                int id = listPreguntas.FindIndex(x => x.IdPregunta == randomNumero);
-                var Preg = listPreguntas[id].DescPregunta;
-                Console.WriteLine($"Por un premio de ${premio} pesos.\n{Preg}:");
-
-                List<Respuesta> listRespuestas = new List<Respuesta>();
-                listRespuestas = db.Respuestas.Where(p => p.IdPregunta == randomNumero).ToList();
-                int idOpcion = listRespuestas.FindIndex(x => x.IdPregunta == randomNumero);
-                
-                Console.WriteLine($"Elija una de las siguientes opciones:");
-                for (int i = 1; i < 5; i++)
+                var infoParticipante = new Participante();
+                infoParticipante.NombrePartcipante = nombre;
+                for (int j = 1; j < 6; j++)
                 {
-                    var resp = listRespuestas[idOpcion].DescRespuesta;
-                    Console.WriteLine($"{i}){resp}");
-                    idOpcion += 1;
+
+                    var nivelActual = db.Categoria.Where(c => c.Nivel == j).FirstOrDefault();
+                    List<Pregunta> listPreguntas = new List<Pregunta>();
+
+                    listPreguntas = db.Preguntas.Where(p => p.IdCategoria == nivelActual.IdCategoria).ToList();
+                    if (listPreguntas.Count >= randomNumero)
+                    {
+                        Pregunta PreguntaSeleccinada = listPreguntas[randomNumero];
+                        var descripcionPregunta = PreguntaSeleccinada.DescPregunta;
+                        Console.WriteLine($"Nivel: #{j}. Por un premio de ${nivelActual.ValPremioNivel} pesos.\n{descripcionPregunta}:");
+
+                        List<Respuesta> listRespuestas = new List<Respuesta>();
+                        listRespuestas = db.Respuestas.Where(p => p.IdPregunta == PreguntaSeleccinada.IdPregunta).ToList();
+
+                        var indexRespCorrecta = -1;
+                        for (int i = 0; i < listRespuestas.Count; i++)
+                        {
+                            var resp = listRespuestas[i].DescRespuesta;
+                            Console.WriteLine($"{i + 1}){resp}");
+                            if (listRespuestas[i].RespCorrecta == true)
+                            {
+                                indexRespCorrecta = i + 1;
+                            }
+                        }
+                        Console.WriteLine($"Ingrese el número de la opción seleccionada: ");
+
+                        var opcionSelected = Convert.ToInt32(Console.ReadLine());
+
+                        switch (nivelActual.Nivel)
+                        {
+                            case 1:
+                                infoParticipante.Pregunta1 = PreguntaSeleccinada.IdPregunta;
+                                infoParticipante.Respuesta1 = listRespuestas[opcionSelected - 1].IdRespuesta;
+                                break;
+                            case 2:
+                                infoParticipante.Pregunta2 = PreguntaSeleccinada.IdPregunta;
+                                infoParticipante.Respuesta2 = listRespuestas[opcionSelected - 1].IdRespuesta;
+                                break;
+                            case 3:
+                                infoParticipante.Pregunta3 = PreguntaSeleccinada.IdPregunta;
+                                infoParticipante.Respuesta3 = listRespuestas[opcionSelected - 1].IdRespuesta;
+                                break;
+                            case 4:
+                                infoParticipante.Pregunta4 = PreguntaSeleccinada.IdPregunta;
+                                infoParticipante.Respuesta4 = listRespuestas[opcionSelected - 1].IdRespuesta;
+                                break;
+                            case 5:
+                                infoParticipante.Pregunta5 = PreguntaSeleccinada.IdPregunta;
+                                infoParticipante.Respuesta5 = listRespuestas[opcionSelected - 1].IdRespuesta;
+                                break;
+                        }
+
+                        if (opcionSelected == indexRespCorrecta)
+                        {
+                            acum_premio += Convert.ToDouble(nivelActual.ValPremioNivel);
+                            Console.WriteLine($"LA RESPUESTA ES CORRECTA. Acumulaste: ${acum_premio}");
+                        }
+                        else
+                        {
+                            acum_premio = 0;
+                            Console.WriteLine($"LA RESPUESTA ES INCORRECTA. Quedaste eliminado.");
+                            break;
+                        }
+                        if (j <= 5)
+                        {
+                            Console.WriteLine("¿Deseas continuar con la siguiente pregunta? \nRecuerda que el nivel de dificultad será mayor. \nIngrese 'S' para continuar o 'N' para finalizar.");
+
+                            var continuar = Console.ReadLine();
+                            if (continuar.Trim().ToLower() != "s")
+                            {
+                                break;
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("La cantidad de preguntas no coincide con lo esperado.");
+                        acum_premio = 0;
+                    }
+
+
                 }
-                Console.WriteLine($"Opción seleccionada: ");
-                string opcion;
-                opcion = Console.ReadLine();
-                 
-               
-                
 
-
-
-
-            }
-           
-
-            if (respuesta == true)
-            {
-                acum_premio *= 2;
-                Console.WriteLine($"Por ${acum_premio} pesos.\n ");
+                Console.WriteLine($"El juego ha finalizado. Terminaste con un acumulado de {acum_premio}");
+                infoParticipante.TotalPremio = Convert.ToDecimal(acum_premio);
+                db.Participantes.Add(infoParticipante);
+                db.SaveChanges();
+                Console.WriteLine("Presione enter para finalizar.");
+                Console.ReadLine();
             }
 
-            //Console.WriteLine("Hello World!");
         }
     }
 }

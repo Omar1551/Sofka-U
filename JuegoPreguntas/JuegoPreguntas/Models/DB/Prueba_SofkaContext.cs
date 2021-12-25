@@ -12,16 +12,13 @@ namespace JuegoPreguntas.Models.DB
         {
         }
 
-        public Prueba_SofkaContext(string v)
-        {
-        }
-
         public Prueba_SofkaContext(DbContextOptions<Prueba_SofkaContext> options)
             : base(options)
         {
         }
 
         public virtual DbSet<Categorium> Categoria { get; set; }
+        public virtual DbSet<Participante> Participantes { get; set; }
         public virtual DbSet<Pregunta> Preguntas { get; set; }
         public virtual DbSet<Respuesta> Respuestas { get; set; }
 
@@ -47,6 +44,43 @@ namespace JuegoPreguntas.Models.DB
                 entity.Property(e => e.ValPremioNivel)
                     .HasColumnType("decimal(18, 0)")
                     .HasColumnName("Val_Premio_Nivel");
+            });
+
+            modelBuilder.Entity<Participante>(entity =>
+            {
+                entity.HasKey(e => e.IdParticipante);
+
+                entity.Property(e => e.IdParticipante).HasColumnName("Id_Participante");
+
+                entity.Property(e => e.NombrePartcipante)
+                    .IsRequired()
+                    .HasMaxLength(60)
+                    .IsUnicode(false)
+                    .HasColumnName("Nombre_Partcipante");
+
+                entity.Property(e => e.Pregunta1).HasColumnName("Pregunta_1");
+
+                entity.Property(e => e.Pregunta2).HasColumnName("Pregunta_2");
+
+                entity.Property(e => e.Pregunta3).HasColumnName("Pregunta_3");
+
+                entity.Property(e => e.Pregunta4).HasColumnName("Pregunta_4");
+
+                entity.Property(e => e.Pregunta5).HasColumnName("Pregunta_5");
+
+                entity.Property(e => e.Respuesta1).HasColumnName("Respuesta_1");
+
+                entity.Property(e => e.Respuesta2).HasColumnName("Respuesta_2");
+
+                entity.Property(e => e.Respuesta3).HasColumnName("Respuesta_3");
+
+                entity.Property(e => e.Respuesta4).HasColumnName("Respuesta_4");
+
+                entity.Property(e => e.Respuesta5).HasColumnName("Respuesta_5");
+
+                entity.Property(e => e.TotalPremio)
+                    .HasColumnType("decimal(18, 0)")
+                    .HasColumnName("Total_Premio");
             });
 
             modelBuilder.Entity<Pregunta>(entity =>
