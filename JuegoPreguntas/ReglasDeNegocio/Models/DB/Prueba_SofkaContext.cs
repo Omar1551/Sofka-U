@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace JuegoPreguntas.Models.DB
+namespace ReglasDeNegocio.Models.DB
 {
     public partial class Prueba_SofkaContext : DbContext
     {

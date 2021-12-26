@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31911.196
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JuegoPreguntas", "JuegoPreguntas\JuegoPreguntas.csproj", "{CFD93C10-9CB6-4613-9F0A-821FCCE36142}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JuegoPreguntas", "JuegoPreguntas\JuegoPreguntas.csproj", "{CFD93C10-9CB6-4613-9F0A-821FCCE36142}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReglasDeNegocio", "ReglasDeNegocio\ReglasDeNegocio.csproj", "{F9590647-491F-4A69-9286-15A1860256CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{CFD93C10-9CB6-4613-9F0A-821FCCE36142}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFD93C10-9CB6-4613-9F0A-821FCCE36142}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CFD93C10-9CB6-4613-9F0A-821FCCE36142}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9590647-491F-4A69-9286-15A1860256CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9590647-491F-4A69-9286-15A1860256CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9590647-491F-4A69-9286-15A1860256CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9590647-491F-4A69-9286-15A1860256CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace JuegoPreguntas.Models.DB
+namespace ReglasDeNegocio.Models.DB
 {
     public partial class Pregunta
     {
@@ -15,7 +15,10 @@ namespace JuegoPreguntas.Models.DB
         public int IdPregunta { get; set; }
         public string DescPregunta { get; set; }
         public int IdCategoria { get; set; }
-
+        public string mostrar()
+        {
+            return $"esta es la categoria {IdCategoria} desc {DescPregunta}";
+        }
         public virtual Categorium IdCategoriaNavigation { get; set; }
         public virtual ICollection<Respuesta> Respuesta { get; set; }
     }
